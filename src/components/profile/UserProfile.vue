@@ -22,6 +22,26 @@
                         <router-link :to="{name: 'AddRecipe'}">
                             <a class="btn-floating btn-large waves-effect waves-light red add"><i class="material-icons">add</i></a>
                         </router-link>
+                    <div class="row">
+                    <div class="col s12 m5" v-for="recipe in recipes" :key="recipe.id">
+                        <div class="card hoverable">
+                        <div class="card-image">
+                            <img :src= "recipe.img_url">
+                            <a class="btn-floating halfway-fab waves-effect waves-light red delete" @click="deleteRecipe(recipe.id)"><i class="material-icons">delete</i></a>
+                            <router-link :to="{name: 'EditRecipe', params: {recipe_slug: recipe.slug}}">
+                            <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">edit</i></a>
+                            </router-link>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title">{{ recipe.name }}</span>
+                            <ul class="ingredients">
+                            <li v-for="(ing,index) in recipe.ingredients" :key="index">{{ ing }}</li>
+                            </ul>
+                            <p>{{ recipe.description}}</p>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -36,7 +56,8 @@ export default {
     data(){
         return {
             profile: null,
-            user:null
+            user:null,
+            recipes: []
         }
 
     },
@@ -58,6 +79,19 @@ export default {
         }).catch(err =>{
             console.log(err.message)
         })
+
+        //get recipes
+        let recipeRef = db.collection('recipes')
+        recipeRef.where('user_id' ,'==' ,firebase.auth().currentUser.uid).get()
+         .then(snapshot => {
+            snapshot.forEach(doc =>{ 
+                let recipe = doc.data
+                recipe.id = doc.id
+                this.recipes.push(recipe)
+                console.log(this.recipes)
+            })
+        })
+
     }
 
 }
