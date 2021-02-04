@@ -45,18 +45,19 @@
 
 <script>
 import db from '@/firebase/init'
+import firebase from 'firebase'
 export default {
     name:'EditRecipe',
     data(){
         return {
             recipe: null,
             another: null,
-            feedback: null
+            feedback: null,
+            username: null
         }
     },
     created(){
         let ref= db.collection('recipes').where('slug','==',this.$route.params.recipe_slug)
-
         ref.get().then(snapshot => {
             snapshot.forEach(doc => {
                 this.recipe = doc.data()
@@ -64,6 +65,14 @@ export default {
             })
         }).catch(err =>{
             console.log(err)
+        })
+        let user = firebase.auth().currentUser
+        db.collection('users').where('user_id', '==', user.uid).get()
+            .then(snapshot=>{
+                snapshot.forEach((doc) =>{
+                   this.username = doc.id
+                   console.log(this.username)
+                })
         })
     },
     methods:{
@@ -76,7 +85,7 @@ export default {
                     img_url: this.recipe.img_url,
                     slug: this.recipe.slug
                 }).then(() =>{
-                    this.$router.push({name: 'Index'})
+                    this.$router.push({name: 'UserProfile' , params: { id: this.username}})
                 }).catch(err =>{
                     console.log(err)
                 })

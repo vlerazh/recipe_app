@@ -1,5 +1,5 @@
 <template>
-    <div  v-if="profile" class="profile">
+    <div  v-if="user" class="profile">
         <div class="banner">
             <div class="banner_img">
             </div>
@@ -9,8 +9,9 @@
                         <img src="../../assets/defaultUser.jpg" alt="">
                     </div>
                     <div class="col s7 info_div">
-                        <h3>Vlera Zhubi</h3>
-                        <p>vlera@email.com</p>
+                        <h3>{{user.name}} {{user.lastname}}</h3>
+                        <p>{{user.email}}</p>
+                        <router-link :to="{ name:'EditProfile' , params: {id:user.id}}" class="waves-effect waves-light btn"><i class="material-icons right">edit</i>Edit Profile</router-link>
                     </div>
                 </div>
             </div>
@@ -63,35 +64,41 @@ export default {
     },
     created(){
         let ref = db.collection('users')
-
+        console.log(ref)
         //get current user
         ref.where('user_id','==',firebase.auth().currentUser.uid).get()
         .then(snapshot => {
             snapshot.forEach(doc =>{ 
-                this.user = doc.data,
+                this.user = doc.data(),
                 this.user.id = doc.id
+                console.log(this.user)
             })
-        })
-        //profile data
-        ref.doc(this.$route.params.id).get()
-        .then(user =>{
-            this.profile = user.data()
-        }).catch(err =>{
-            console.log(err.message)
         })
 
         //get recipes
         let recipeRef = db.collection('recipes')
-        recipeRef.where('user_id' ,'==' ,firebase.auth().currentUser.uid).get()
+        recipeRef.get()
          .then(snapshot => {
             snapshot.forEach(doc =>{ 
-                let recipe = doc.data
+                let recipe = doc.data()
                 recipe.id = doc.id
-                this.recipes.push(recipe)
-                console.log(this.recipes)
+                if(recipe.user_id == firebase.auth().currentUser.uid){
+                    this.recipes.push(recipe)
+                }
             })
         })
 
+    },
+    methods:{
+         deleteRecipe(id){
+            db.collection('recipes').doc(id).delete()
+            .then(()=>{
+                this.recipes = this.recipes.filter(recipe =>{
+                return recipe.id != id
+                })
+            })
+        }
+  
     }
 
 }
@@ -153,5 +160,10 @@ export default {
     }
     .profile .user_recipes .add{
         float: right;
+        
+    }
+    .profile .user_recipes a.delete{
+        left:25px;
+        bottom: -25px;
     }
 </style>

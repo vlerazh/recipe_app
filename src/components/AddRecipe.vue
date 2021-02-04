@@ -67,7 +67,8 @@ export default {
             feedback: null,
             slug: null,
             show: false,
-            user_id: null
+            user_id: null,
+            username:null
         }
     },
     methods:{
@@ -87,9 +88,9 @@ export default {
                     show: this.show,
                     user_id: this.user_id
                 }).then(() =>{
-                    this.$router.push({name: 'Index'})
+                    this.$router.push({name: 'UserProfile' , params: { id: this.username}})
                 }).catch(err =>{
-                    console.log(error)
+                    console.log(err)
                 })
                 this.feedback = null
             }else{
@@ -135,7 +136,8 @@ export default {
         db.collection('users').where('user_id', '==', user.uid).get()
             .then(snapshot=>{
                 snapshot.forEach((doc) =>{
-                   this.user_id = doc.id
+                   this.user_id = doc.data().user_id
+                   this.username = doc.id
                 })
         })
     }

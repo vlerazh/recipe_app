@@ -8,6 +8,17 @@
                     <div class="card-content">
                         <span class="card-title center">Signup</span>
                         <form @submit.prevent="signup" class="card-panel">
+                            <div class="row">
+                                <div class=" col s5 field ">
+                                    <label for="first_name">First Name</label>
+                                    <input  id="first_name" type="text" v-model="name">
+                                </div>
+                                <div class=" col s5 field">
+                                    <label for="last_name">Last Name</label>
+                                    <input id="last_name" type="text" v-model="lastname">
+                                    
+                                </div>
+                            </div>
                             <div class="field">
                                 <label for="email">Email</label>
                                 <input type="email" name="email" v-model="email">
@@ -19,7 +30,7 @@
                                 <span v-if="!showPw" class="material-icons visibility" @click="showPw =! showPw" >visibility_off</span>
                             </div>
                             <div class="field">
-                                <label for="username">username</label>
+                                <label for="username">Username</label>
                                 <input type="text" name="email" v-model="username">
                             </div>
                             <p class="red-text center" v-if="feedback">{{ feedback}}</p>
@@ -46,9 +57,12 @@ export default {
             showPw: false,
             email: null,
             password: null,
+            name: null,
+            lastname:null,
             feedback: null,
             username: null,
             slug: null,
+            profile_img: require('../../assets/defaultUser.jpg')
         }
     },
     methods: {
@@ -75,11 +89,17 @@ export default {
                         firebase.auth().createUserWithEmailAndPassword(this.email,this.password)
                         .then(cred =>{
                             ref.set({
-                                username: this.username,
-                                user_id: cred.user.uid
+                                username: this.slug,
+                                user_id: cred.user.uid,
+                                name: this.name,
+                                lastname: this.lastname,
+                                email: this.email,
+                                profile_img: this.profile_img
                             })
                         }).then(() =>{
                             this.$router.push({name : 'UserProfile', params: {id: doc.id}})
+                        }).catch(err =>{
+                            this.feedback = err.message
                         })
                     }
                 })
@@ -105,7 +125,7 @@ export default {
         margin-top: 60px;
     }
     .signup .card form{
-        min-height: 520px;
+        min-height: 570px;
     }
     .signup .card .card-title{
         font-size: 3em;
@@ -114,7 +134,7 @@ export default {
         
     }
     .signup .card form .field{
-        margin: 25px 5px;
+        margin: 15px 5px;
         position: relative;
     }
     .signup .visibility{

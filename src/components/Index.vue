@@ -10,10 +10,6 @@
             <div class="card hoverable">
               <div class="card-image">
                 <img :src= "recipe.img_url">
-                <a class="btn-floating halfway-fab waves-effect waves-light red delete" @click="deleteRecipe(recipe.id)"><i class="material-icons">delete</i></a>
-                <router-link :to="{name: 'EditRecipe', params: {recipe_slug: recipe.slug}}">
-                  <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">edit</i></a>
-                </router-link>
               </div>
               <div class="card-content">
                 <span class="card-title">{{ recipe.name }}</span>
@@ -56,16 +52,8 @@ export default {
       })
     })
   },
-  methods:{
-    deleteRecipe(id){
-      db.collection('recipes').doc(id).delete()
-      .then(()=>{
-        this.recipes = this.recipes.filter(recipe =>{
-          return recipe.id != id
-        })
-      })
-    }
-  }
+
+   
 }
 </script>
 
@@ -94,8 +82,5 @@ margin-top: 5%;
     border-radius: 10px;
     font-size: 18px;
   }
-  .index .delete{
-    left:25px;
-   bottom: -25px;
-  }
+
 </style>

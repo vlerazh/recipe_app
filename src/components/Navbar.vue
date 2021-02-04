@@ -8,7 +8,7 @@
             </router-link>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><router-link :to="{name: 'Index'}">Home</router-link></li>
-                <li v-if="user"><router-link :to="{name: 'UserProfile', params:{ }}">Your Profile</router-link></li>
+                <li v-if="user"><router-link :to="{name: 'UserProfile', params:{ id: username }}">Your Profile</router-link></li>
                 <li v-if="!user"><router-link :to="{name: 'Login'}">Login</router-link></li>
                 <li  v-if="user"><a @click="logout">Logout</a></li>
             </ul>
@@ -25,7 +25,7 @@ export default {
     data(){
         return{
             user: null,
-            userData: null
+            username: null,
         }
     },
     methods:{
@@ -42,6 +42,14 @@ export default {
             }else{
                 this.user = null
             }
+        })
+
+        let user = firebase.auth().currentUser
+        db.collection('users').where('user_id', '==', user.uid).get()
+            .then(snapshot=>{
+                snapshot.forEach((doc) =>{
+                   this.username = doc.id
+                })
         })
     }
 }

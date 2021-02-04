@@ -58,7 +58,7 @@ export default {
                 .then(cred =>{
                     //redirect te profile
                     console.log(cred.user)
-                    this.$router.push({name : 'UserProfile', params:{id: 'vlera'}})
+                    this.$router.push({name : 'UserProfile', params:{id: ''}})
                 }).catch(err =>{
                     console.log(err)
                     this.feedback = err.message

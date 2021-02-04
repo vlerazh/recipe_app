@@ -6,6 +6,7 @@ import EditRecipe from '@/components/EditRecipe'
 import Login from '@/components/auth/Login'
 import Signup from '@/components/auth/Signup'
 import UserProfile from '@/components/profile/UserProfile'
+import EditProfile from '@/components/profile/EditProfile'
 import firebase from 'firebase'
 Vue.use(Router)
 
@@ -46,6 +47,14 @@ const router = new Router({
       path:'/profile/:id',
       name: 'UserProfile',
       component: UserProfile,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path:'/edit-profile/:id',
+      name:'EditProfile',
+      component: EditProfile,
       meta: {
         requiresAuth: true
       }
