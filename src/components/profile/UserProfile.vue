@@ -6,7 +6,7 @@
             <div class="container user_info">
                 <div class="row">
                     <div class="col s4 image_div">
-                        <img src="../../assets/defaultUser.jpg" alt="">
+                        <img :src="user.profile_img" alt="">
                     </div>
                     <div class="col s7 info_div">
                         <h3>{{user.name}} {{user.lastname}}</h3>

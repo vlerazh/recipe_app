@@ -13,6 +13,7 @@ Vue.use(Router)
 const router = new Router({
   routes: [
     {
+      mode:'history',
       path: '/',
       name: 'Index',
       component: Index
