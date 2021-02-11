@@ -7,6 +7,7 @@ import Login from '@/components/auth/Login'
 import Signup from '@/components/auth/Signup'
 import UserProfile from '@/components/profile/UserProfile'
 import EditProfile from '@/components/profile/EditProfile'
+import RecipeDetails from '@/components/RecipeDetails'
 import firebase from 'firebase'
 Vue.use(Router)
 
@@ -59,6 +60,11 @@ const router = new Router({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path:'/recipe-details/:id',
+      name: 'RecipeDetails',
+      component: RecipeDetails
     }
   ]
 })

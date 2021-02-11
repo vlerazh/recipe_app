@@ -7,18 +7,20 @@
     
       <div class="row">
           <div class="col s12 m5" v-for="recipe in recipes" :key="recipe.id">
-            <div class="card hoverable">
-              <div class="card-image">
-                <img :src= "recipe.img_url">
+            <router-link :to="{ name: 'RecipeDetails', params:{ id: recipe.slug}}">
+              <div class="card hoverable">
+                <div class="card-image">
+                  <img :src= "recipe.img_url">
+                </div>
+                <div class="card-content">
+                  <span class="card-title">{{ recipe.name }}</span>
+                  <ul class="ingredients">
+                    <li v-for="(ing,index) in recipe.ingredients" :key="index">{{ ing }}</li>
+                  </ul>
+                  <p>{{ recipe.description}}</p>
+                </div>
               </div>
-              <div class="card-content">
-                <span class="card-title">{{ recipe.name }}</span>
-                <ul class="ingredients">
-                  <li v-for="(ing,index) in recipe.ingredients" :key="index">{{ ing }}</li>
-                </ul>
-                <p>{{ recipe.description}}</p>
-              </div>
-            </div>
+            </router-link>
           </div>
         </div>
     </div>
@@ -69,6 +71,10 @@ export default {
   float: right;
 margin-top: 5%;
 }
+.index .card{
+  width: 300px;
+}
+
   .index  .card-title{
     font-family: 'Source Serif Pro', serif;
     text-align: center;
