@@ -73,6 +73,7 @@ margin-top: 5%;
 }
 .index .card{
   width: 300px;
+  color: black;
 }
 
   .index  .card-title{
